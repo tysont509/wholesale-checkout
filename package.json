@@ -1,0 +1,8 @@
+{
+  "name": "wholesale-checkout",
+  "version": "1.0.0",
+  "dependencies": {
+    "@vercel/node": "^2.15.1",
+    "stripe": "^12.0.0"
+  }
+}
