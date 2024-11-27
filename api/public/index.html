@@ -1,0 +1,102 @@
+// 3. public/index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wholesale Order</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        .notes {
+            width: 100%;
+            height: 100px;
+            margin: 15px 0;
+            padding: 8px;
+        }
+        .checkout-button {
+            background: #635bff;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Place Your Order</h1>
+        
+        <div class="product-card">
+            <h3>Product A</h3>
+            <select id="product1-option">
+                <option value="price_xxx1">Option 1 ($100)</option>
+                <option value="price_xxx2">Option 2 ($120)</option>
+            </select>
+            <input type="number" id="product1-quantity" value="0" min="0">
+        </div>
+
+        <div class="product-card">
+            <h3>Product B</h3>
+            <select id="product2-option">
+                <option value="price_yyy1">Option 1 ($150)</option>
+                <option value="price_yyy2">Option 2 ($180)</option>
+            </select>
+            <input type="number" id="product2-quantity" value="0" min="0">
+        </div>
+
+        <textarea 
+            class="notes" 
+            id="orderNotes" 
+            placeholder="Add any special instructions or notes for your order here..."
+        ></textarea>
+
+        <button id="checkout" class="checkout-button">
+            Proceed to Checkout
+        </button>
+    </div>
+
+    <script>
+        const stripe = Stripe('pk_test_your_publishable_key');
+
+        document.getElementById('checkout').addEventListener('click', async () => {
+            const items = [
+                {
+                    priceId: document.getElementById('product1-option').value,
+                    quantity: parseInt(document.getElementById('product1-quantity').value)
+                },
+                {
+                    priceId: document.getElementById('product2-option').value,
+                    quantity: parseInt(document.getElementById('product2-quantity').value)
+                }
+            ].filter(item => item.quantity > 0);
+
+            const notes = document.getElementById('orderNotes').value;
+
+            const response = await fetch('/api/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    items,
+                    notes
+                }),
+            });
+
+            const { url } = await response.json();
+            window.location = url;
+        });
+    </script>
+</body>
+</html>
