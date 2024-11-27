@@ -1,4 +1,3 @@
-// 3. public/index.html
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,18 +8,28 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
         }
         .product-card {
             border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
             border-radius: 8px;
+        }
+        .quantity-input {
+            width: 80px;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
         .notes {
             width: 100%;
             height: 100px;
             margin: 15px 0;
             padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
         .checkout-button {
             background: #635bff;
@@ -30,6 +39,10 @@
             border: none;
             width: 100%;
             cursor: pointer;
+            font-size: 16px;
+        }
+        .checkout-button:hover {
+            background: #5851ea;
         }
     </style>
 </head>
@@ -38,21 +51,15 @@
         <h1>Place Your Order</h1>
         
         <div class="product-card">
-            <h3>Product A</h3>
-            <select id="product1-option">
-                <option value="price_xxx1">Option 1 ($100)</option>
-                <option value="price_xxx2">Option 2 ($120)</option>
-            </select>
-            <input type="number" id="product1-quantity" value="0" min="0">
-        </div>
-
-        <div class="product-card">
-            <h3>Product B</h3>
-            <select id="product2-option">
-                <option value="price_yyy1">Option 1 ($150)</option>
-                <option value="price_yyy2">Option 2 ($180)</option>
-            </select>
-            <input type="number" id="product2-quantity" value="0" min="0">
+            <h3>Product</h3>
+            <input 
+                type="number" 
+                id="quantity" 
+                class="quantity-input"
+                value="1" 
+                min="1"
+                placeholder="Quantity"
+            >
         </div>
 
         <textarea 
@@ -67,19 +74,13 @@
     </div>
 
     <script>
-        const stripe = Stripe('pk_test_your_publishable_key');
+        const stripe = Stripe('pk_test_51JGRsVBU8HneHDoUxZA3Va4m8n9XMfDDTkSHx9C9LFtuITdOHDB62QbjswGbvfBxwzq3rLmRgjt9Zv3aHEbp5jqI00Vpo8bVYQ');
 
         document.getElementById('checkout').addEventListener('click', async () => {
-            const items = [
-                {
-                    priceId: document.getElementById('product1-option').value,
-                    quantity: parseInt(document.getElementById('product1-quantity').value)
-                },
-                {
-                    priceId: document.getElementById('product2-option').value,
-                    quantity: parseInt(document.getElementById('product2-quantity').value)
-                }
-            ].filter(item => item.quantity > 0);
+            const items = [{
+                priceId: 'price_1QNRz8BU8HneHDoUqXxeaj8B',
+                quantity: parseInt(document.getElementById('quantity').value)
+            }];
 
             const notes = document.getElementById('orderNotes').value;
 
